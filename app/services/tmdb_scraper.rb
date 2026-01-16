@@ -20,14 +20,14 @@ class TmdbScraper
 
   def scrape_movies
     DECADE_THRESHOLDS.each do |decade_range, vote_threshold|
-      puts "Scraping #{decade_range.first}-#{decade_range.last} (vote_count >= #{vote_count})"
+      puts "Scraping #{decade_range.first}-#{decade_range.last} (vote_count >= #{vote_threshold})"
 
       page = 1
       loop do
         data = get_movies_page(
           page: page,
-          year_min: year_min,
-          year_max: year_max,
+          year_min: decade_range.first,
+          year_max: decade_range.last,
           vote_count_min: vote_threshold
         )
 
@@ -42,7 +42,23 @@ class TmdbScraper
         break if page >= data['total_pages']
         page += 1
         sleep(RATE_LIMIT_TIME)
+      end
+    end
   end
+
+  def save_movie(movie_data)
+    Movie.find_or_create_by(tmdb_id: movie_data['id']) do |movie|
+      movie.title = movie_data['title']
+      movie.year = movie_data['release_date']&.split('-')&.first&.to_i
+      movie_popularity = movie_data['popularity']
+      movie.vote_count = movie_data['vote_count']
+      movie.vote_average = movie_data['vote_average']
+      movie.overview = movie_data['overview']
+      movie.genres = movie_data['genre_ids']
+      movie.poster_path = movie_data['poster_path']
+    end
+  end
+
 
   private 
 
