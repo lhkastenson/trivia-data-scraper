@@ -1,6 +1,6 @@
 class TmdbTvScraper
   include HTTParty
-  base_uri 'https://api.themoviedb.org/3'
+  base_uri "https://api.themoviedb.org/3"
 
   DECADE_THRESHOLDS = {
     (1960..1969) => 200,
@@ -15,7 +15,7 @@ class TmdbTvScraper
   RATE_LIMIT_TIME = 0.25
 
   def initialize
-    @api_key = ENV['TMDB_API_KEY']
+    @api_key = ENV["TMDB_API_KEY"]
   end
 
   def scrape_tv_shows
@@ -31,15 +31,15 @@ class TmdbTvScraper
           vote_count_min: vote_threshold
         )
 
-        break if data['results'].empty?
+        break if data["results"].empty?
 
-        data['results'].each do |show_data|
+        data["results"].each do |show_data|
           save_tv_show(show_data)
         end
 
         puts "   Page #{page}/#{data['total_pages']} - #{data['results'].size} shows"
 
-        break if page >= data['total_pages']
+        break if page >= data["total_pages"]
         page += 1
 
         sleep(RATE_LIMIT_TIME)
@@ -50,29 +50,28 @@ class TmdbTvScraper
   private
 
   def get_tv_shows_page(page:, year_min:, year_max:, vote_count_min:)
-    response = self.class.get('/discover/tv', query: {
+    response = self.class.get("/discover/tv", query: {
       api_key: @api_key,
       page: page,
-      'first_air_date.gte' => "#{year_min}-01-01",
-      'first_air_date.lte' => "#{year_max}-12-31",
-      'vote_count.gte' => vote_count_min,
-      sort_by: 'popularity.desc'
+      "first_air_date.gte" => "#{year_min}-01-01",
+      "first_air_date.lte" => "#{year_max}-12-31",
+      "vote_count.gte" => vote_count_min,
+      sort_by: "popularity.desc"
     })
 
     response.parsed_response
   end
 
   def save_tv_show(show_data)
-    TvShow.find_or_create_by(tmdb_id: show_data['id']) do |show|
-      show.title = show_data['name']
-      show.year = show_data['first_air_date']&.split('-')&.first&.to_i
-      show.popularity = show_data['popularity']
-      show.vote_count = show_data['vote_count']
-      show.vote_average = show_data['vote_average']
-      show.overview = show_data['overview']
-      show.genres = show_data['genre_ids']
-      show.poster_path = show_data['poster_path']
+    TvShow.find_or_create_by(tmdb_id: show_data["id"]) do |show|
+      show.title = show_data["name"]
+      show.year = show_data["first_air_date"]&.split("-")&.first&.to_i
+      show.popularity = show_data["popularity"]
+      show.vote_count = show_data["vote_count"]
+      show.vote_average = show_data["vote_average"]
+      show.overview = show_data["overview"]
+      show.genres = show_data["genre_ids"]
+      show.poster_path = show_data["poster_path"]
     end
   end
 end
-

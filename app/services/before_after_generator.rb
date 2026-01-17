@@ -1,5 +1,4 @@
 class BeforeAfterGenerator
-
   BASE_QUALITY_SCORE = 5
   SINGLE_LOW_QUALITY_SCORE = 2
   SINGLE_MID_QUALITY_SCORE = 6
@@ -15,16 +14,16 @@ class BeforeAfterGenerator
   end
 
   def generate_all
-    puts 'Generating before and afters'
+    puts "Generating before and afters"
 
-    generate_combinations(@movies, @movies, 'Movie', 'Movie')
-    generate_combinations(@tv_shows, @movies, 'TvShow', 'Movie')
-    generate_combinations(@movies, @tv_shows, 'Movie', 'TvShow')
+    generate_combinations(@movies, @movies, "Movie", "Movie")
+    generate_combinations(@tv_shows, @movies, "TvShow", "Movie")
+    generate_combinations(@movies, @tv_shows, "Movie", "TvShow")
 
-    puts 'Done!'
+    puts "Done!"
   end
 
-  private 
+  private
 
   def find_overlap(title_one, title_two)
     words_one = title_one.split
@@ -33,14 +32,14 @@ class BeforeAfterGenerator
     return nil if words_one.empty? || words_two.empty?
 
     longest_overlap = nil
-    max_possible = [words_one.length, words_two.length].min
+    max_possible = [ words_one.length, words_two.length ].min
 
     (1..max_possible).each do |len|
       suffix = words_one[-len..]
       prefix = words_two[0, len]
 
       if valid_match?(suffix, prefix)
-        longest_overlap = suffix.join(' ')
+        longest_overlap = suffix.join(" ")
       end
     end
 
@@ -70,13 +69,12 @@ class BeforeAfterGenerator
   def generate_combinations(items_one, items_two, type_one, type_two)
     items_one.each do |item_one|
       items_two.each do |item_two|
-        
         next if item_one.id == item_two.id && type_one == type_two
 
         next if item_one.title.downcase == item_two.title.downcase
 
         if item_one.title.length != item_two.title.length
-          shorter, longer = [item_one.title.downcase, item_two.title.downcase].sort_by(&:length)
+          shorter, longer = [ item_one.title.downcase, item_two.title.downcase ].sort_by(&:length)
           next if longer.include?(shorter)
         end
 
@@ -100,7 +98,7 @@ class BeforeAfterGenerator
     ) do |ba|
       ba.full_phrase = full_phrase
       ba.format = format
-      ba.status = 'generated'
+      ba.status = "generated"
       ba.quality_rating = quality
     end
   end
@@ -118,16 +116,16 @@ class BeforeAfterGenerator
     end
 
 
-    prefix = words_one[0...words_to_keep].join(' ')
+    prefix = words_one[0...words_to_keep].join(" ")
 
     "#{prefix} #{title_two}".strip
   end
 
   def determine_format(type_one, type_two)
-    if(type_one == 'Movie' || type_one == 'TvShow') && (type_two == 'Movie' || type_two == 'TvShow')
-      'imdb'
+    if (type_one == "Movie" || type_one == "TvShow") && (type_two == "Movie" || type_two == "TvShow")
+      "imdb"
     else
-      'imdb'
+      "imdb"
     end
   end
 
