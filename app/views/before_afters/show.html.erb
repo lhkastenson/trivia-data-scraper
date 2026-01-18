@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Review: <%= @before_after.full_phrase %></title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; max-width: 800px; }
+    .puzzle-box { background: #f9f9f9; padding: 20px; margin: 20px 0; border-radius: 5px; }
+    .item-details { background: white; padding: 15px; margin: 10px 0; border: 1px solid #ddd; }
+    .review-form { background: #e3f2fd; padding: 20px; margin: 20px 0; }
+    .button { padding: 10px 20px; margin: 5px; font-size: 16px; cursor: pointer; }
+    .approve { background: #4caf50; color: white; border: none; }
+    .reject { background: #f44336; color: white; border: none; }
+    .back { background: #2196f3; color: white; text-decoration: none; padding: 10px 20px; }
+  </style>
+</head>
+<body>
+  <%= link_to '← Back to List', before_afters_path, class: 'back' %>
+  
+  <div class="puzzle-box">
+    <h1><%= @before_after.full_phrase %></h1>
+    <p><strong>Connecting Word:</strong> <%= @before_after.connecting_word %></p>
+    <p><strong>Format:</strong> <%= @before_after.format %></p>
+    <p><strong>Current Quality Rating:</strong> <%= @before_after.quality_rating %>/10</p>
+    <p><strong>Current Status:</strong> <%= @before_after.status %></p>
+  </div>
+  
+  <div class="item-details">
+    <h3>Item One: <%= @before_after.item_one_type %></h3>
+    <p><strong>Title:</strong> <%= @before_after.item_one.title %></p>
+    <p><strong>Year:</strong> <%= @before_after.item_one.year %></p>
+    <p><strong>Vote Count:</strong> <%= @before_after.item_one.vote_count %></p>
+    <p><strong>Overview:</strong> <%= @before_after.item_one.overview %></p>
+  </div>
+  
+  <div class="item-details">
+    <h3>Item Two: <%= @before_after.item_two_type %></h3>
+    <p><strong>Title:</strong> <%= @before_after.item_two.title %></p>
+    <p><strong>Year:</strong> <%= @before_after.item_two.year %></p>
+    <p><strong>Vote Count:</strong> <%= @before_after.item_two.vote_count %></p>
+    <p><strong>Overview:</strong> <%= @before_after.item_two.overview %></p>
+  </div>
+  
+  <div class="review-form">
+    <h2>Review This Puzzle</h2>
+    
+    <%= form_with model: @before_after, url: before_after_path(@before_after), method: :patch do |f| %>
+      <div>
+        <%= f.label :quality_rating, "Quality Rating (0-10)" %>
+        <%= f.number_field :quality_rating, in: 0..10, step: 1 %>
+      </div>
+      
+      <div style="margin-top: 15px;">
+        <%= f.label :status %>
+        <br>
+        <%= f.radio_button :status, 'approved' %>
+        <%= f.label :status_approved, 'Approve' %>
+        
+        <%= f.radio_button :status, 'rejected' %>
+        <%= f.label :status_rejected, 'Reject' %>
+        
+        <%= f.radio_button :status, 'generated' %>
+        <%= f.label :status_generated, 'Undecided' %>
+      </div>
+      
+      <div style="margin-top: 20px;">
+        <%= f.submit 'Save & Next', class: 'button approve' %>
+      </div>
+    <% end %>
+  </div>
+</body>
+</html>

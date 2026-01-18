@@ -34,6 +34,8 @@ gem "image_processing", "~> 1.2"
 
 gem "httparty"
 
+gem "kaminari"
+
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin Ajax possible
 # gem "rack-cors"
 

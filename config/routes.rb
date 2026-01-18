@@ -1,6 +1,14 @@
 Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  resources :before_afters, only: [ :index, :show, :update ] do
+    collection do
+      get "review"
+      post "quick_update"
+    end
+  end
 
+
+  root "before_afters#index"
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
