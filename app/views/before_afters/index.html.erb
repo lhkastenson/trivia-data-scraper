@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Before/After Curation</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .filters { background: #f0f0f0; padding: 15px; margin-bottom: 20px; }
+    .filters form { display: inline-block; margin-right: 20px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
+    th { background: #333; color: white; }
+    .status-generated { color: #666; }
+    .status-approved { color: green; font-weight: bold; }
+    .status-rejected { color: red; }
+    .quality-high { background: #d4edda; }
+    .quality-medium { background: #fff3cd; }
+    .quality-low { background: #f8d7da; }
+    .pagination { margin-top: 20px; text-align: center; }
+    .pagination a { margin: 0 5px; }
+  </style>
+</head>
+<body>
+  <h1>Before/After Puzzle Curation</h1>
+  
+  <div class="filters">
+    <h3>Filters</h3>
+      <%= form_with url: before_afters_path, method: :get do |f| %>
+      <%= f.label :status %>
+      <%= f.select :status, options_for_select([['All', ''], ['Generated', 'generated'], ['Approved', 'approved'], ['Rejected', 'rejected']], params[:status]), {}, { onchange: 'this.form.submit()' } %>
+      
+      <%= f.label :min_rating, "Min Quality" %>
+      <%= f.select :min_rating, options_for_select([['All', ''], ['7+', 7], ['5+', 5], ['3+', 3]], params[:min_rating]), {}, { onchange: 'this.form.submit()' } %>
+      
+      <%= f.label :sort_by %>
+      <%= f.select :sort_by, options_for_select([['Quality Rating', 'quality_rating'], ['Created Date', 'created_at']], params[:sort_by]), {}, { onchange: 'this.form.submit()' } %>
+      
+      <%= f.label :sort_dir %>
+      <%= f.select :sort_dir, options_for_select([['Descending', 'desc'], ['Ascending', 'asc']], params[:sort_dir]), {}, { onchange: 'this.form.submit()' } %>
+    <% end %>
+  </div>
+  
+  <p><strong>Total:</strong> <%= @before_afters.total_count %> puzzles</p>
+  
+  <table>
+    <thead>
+      <tr>
+        <th>Full Phrase</th>
+        <th>Item One</th>
+        <th>Item Two</th>
+        <th>Connecting Word</th>
+        <th>Quality</th>
+        <th>Format</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @before_afters.each do |ba| %>
+        <% quality_class = ba.quality_rating >= 7 ? 'quality-high' : (ba.quality_rating >= 5 ? 'quality-medium' : 'quality-low') %>
+        <tr class="<%= quality_class %>">
+          <td><strong><%= ba.full_phrase %></strong></td>
+          <td><%= ba.item_one.title %> (<%= ba.item_one.year %>)</td>
+          <td><%= ba.item_two.title %> (<%= ba.item_two.year %>)</td>
+          <td><%= ba.connecting_word %></td>
+          <td><%= ba.quality_rating %>/10</td>
+          <td><%= ba.format %></td>
+          <td class="status-<%= ba.status %>"><%= ba.status %></td>
+          <td><%= link_to 'Review', before_after_path(ba) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  
+  <div class="pagination">
+    <%= paginate @before_afters %>
+  </div>
+</body>
+</html>
