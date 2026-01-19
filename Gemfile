@@ -36,6 +36,8 @@ gem "httparty"
 
 gem "kaminari"
 
+gem "rspotify"
+
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin Ajax possible
 # gem "rack-cors"
 
