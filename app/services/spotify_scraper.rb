@@ -66,7 +66,7 @@ class SpotifyScraper
   def scrape_top_artists
     puts "Scraping top artists"
 
-    genres = ["pop", "rock", "hip-hop", "country", "electronic", "r-n-b", "latin", "indie"]
+    genres = [ "pop", "rock", "hip-hop", "country", "electronic", "r-n-b", "latin", "indie" ]
     artists = []
 
     genres.each do |genre|
@@ -131,5 +131,4 @@ class SpotifyScraper
   rescue => e
     puts "  Error saving song #{track.name}: #{e.message}"
   end
-
 end
