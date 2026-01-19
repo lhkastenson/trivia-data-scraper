@@ -10,9 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_16_055804) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_18_173603) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "artists", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "followers"
+    t.jsonb "genres"
+    t.string "name"
+    t.integer "popularity"
+    t.string "spotify_id"
+    t.datetime "updated_at", null: false
+    t.index ["popularity"], name: "index_artists_on_popularity"
+    t.index ["spotify_id"], name: "index_artists_on_spotify_id", unique: true
+  end
 
   create_table "before_afters", force: :cascade do |t|
     t.string "connecting_word", null: false
@@ -52,6 +64,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_16_055804) do
     t.index ["year"], name: "index_movies_on_year"
   end
 
+  create_table "songs", force: :cascade do |t|
+    t.string "album_name"
+    t.bigint "artist_id"
+    t.datetime "created_at", null: false
+    t.integer "popularity"
+    t.date "release_date"
+    t.string "spotify_id"
+    t.string "title"
+    t.datetime "updated_at", null: false
+    t.index ["artist_id"], name: "index_songs_on_artist_id"
+    t.index ["popularity"], name: "index_songs_on_popularity"
+    t.index ["spotify_id"], name: "index_songs_on_spotify_id", unique: true
+  end
+
   create_table "tv_shows", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.jsonb "genres"
@@ -68,4 +94,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_16_055804) do
     t.index ["vote_count"], name: "index_tv_shows_on_vote_count"
     t.index ["year"], name: "index_tv_shows_on_year"
   end
+
+  add_foreign_key "songs", "artists"
 end
