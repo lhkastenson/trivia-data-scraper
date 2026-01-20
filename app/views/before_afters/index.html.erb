@@ -59,8 +59,8 @@
         <% quality_class = ba.quality_rating >= 7 ? 'quality-high' : (ba.quality_rating >= 5 ? 'quality-medium' : 'quality-low') %>
         <tr class="<%= quality_class %>">
           <td><strong><%= ba.full_phrase %></strong></td>
-          <td><%= ba.item_one.title %> (<%= ba.item_one.year %>)</td>
-          <td><%= ba.item_two.title %> (<%= ba.item_two.year %>)</td>
+          <td><%= ba.item_one.title %><%= " (#{ba.item_one.year})" if ba.item_one.respond_to?(:year) && ba.item_one.year %></td>
+          <td><%= ba.item_two.title %><%= " (#{ba.item_two.year})" if ba.item_two.respond_to?(:year) && ba.item_two.year %></td>
           <td><%= ba.connecting_word %></td>
           <td><%= ba.quality_rating %>/10</td>
           <td><%= ba.format %></td>
