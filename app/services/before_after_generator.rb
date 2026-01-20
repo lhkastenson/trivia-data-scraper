@@ -11,14 +11,35 @@ class BeforeAfterGenerator
   def initialize
     @movies = Movie.all.to_a
     @tv_shows = TvShow.all.to_a
+    @artists = Artist.all.to_a
+    @songs = Song.all.to_a
   end
 
   def generate_all
     puts "Generating before and afters"
 
+    # same category
     generate_combinations(@movies, @movies, "Movie", "Movie")
-    generate_combinations(@tv_shows, @movies, "TvShow", "Movie")
+    generate_combinations(@tv_shows, @tv_shows, "TvShow", "TvShow")
+    generate_combinations(@artists, @artists, "Artist", "Artist")
+    generate_combinations(@songs, @songs, "Song", "Song")
+
+    # cross category
     generate_combinations(@movies, @tv_shows, "Movie", "TvShow")
+    generate_combinations(@movies, @artists, "Movie", "Artist")
+    generate_combinations(@movies, @songs, "Movie", "Song")
+
+    generate_combinations(@tv_shows, @movies, "TvShow", "Movie")
+    generate_combinations(@tv_shows, @artists, "TvShow", "Artist")
+    generate_combinations(@tv_shows, @songs, "TvShow", "Song")
+
+    generate_combinations(@artists, @movies, "Artist", "Movie")
+    generate_combinations(@artists, @tv_shows, "Artist", "TvShow")
+    generate_combinations(@artists, @songs, "Artist", "Song")
+
+    generate_combinations(@songs, @movies, "Song", "Movie")
+    generate_combinations(@songs, @tv_shows, "Song", "TvShow")
+    generate_combinations(@songs, @artists, "Song", "Artist")
 
     puts "Done!"
   end
@@ -67,6 +88,14 @@ class BeforeAfterGenerator
   end
 
   def generate_combinations(items_one, items_two, type_one, type_two)
+    
+    # Safety check
+    if items_one.nil? || items_two.nil?
+      puts "Processing: #{type_one} (#{items_one&.count || 'nil'}) + #{type_two} (#{items_two&.count || 'nil'})"
+      puts "  WARNING: Skipping due to nil collection"
+      return
+    end 
+
     items_one.each do |item_one|
       items_two.each do |item_two|
         next if item_one.id == item_two.id && type_one == type_two
@@ -122,11 +151,15 @@ class BeforeAfterGenerator
   end
 
   def determine_format(type_one, type_two)
-    if (type_one == "Movie" || type_one == "TvShow") && (type_two == "Movie" || type_two == "TvShow")
-      "imdb"
-    else
-      "imdb"
+
+    if ["Song", "Artist"].include?(type_one) || ["Song", "Artist"].include?(type_two)
+      return "concert"
     end
+
+    if ["Movie", "TvShow"].include?(type_one) && ["Movie", "TvShow"].include?(type_two)
+      return "imdb"
+    end
+      "imdb"
   end
 
   def calculate_quality_score(connecting_word, full_phrase)
