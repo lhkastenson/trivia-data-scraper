@@ -3,10 +3,12 @@ class BeforeAfterGenerator
   SINGLE_LOW_QUALITY_SCORE = 2
   SINGLE_MID_QUALITY_SCORE = 6
   SINGLE_HIGH_QUALITY_SCORE = 7
-  MULTI_QUALITY_SCORE = 8
+  MULTI_LOW_QUALITY_SCORE = 5
+  MULTI_HIGH_QUALITY_SCORE = 8
   WORD_COUNT_THRESH = 2
   CHAR_COUNT_LOWER_THRESH = 4
   CHAR_COUNT_UPPER_THRESH = 10
+  FILLER_WORDS = %w[the a an of in on at to for and or but i]
 
   def initialize
     @movies = Movie.all.to_a
@@ -42,6 +44,27 @@ class BeforeAfterGenerator
     generate_combinations(@songs, @artists, "Song", "Artist")
 
     puts "Done!"
+  end
+
+  def rescore_all
+    unreviewed = BeforeAfter.where(status: "generated")
+    puts "Rescoring #{unreviewed.count}"
+
+    updated_count = 0
+
+    unreviewed.find_each.with_index do |ba, index|
+      old_score = ba.quality_rating
+      new_score = calculate_quality_score(ba.connecting_word, ba.full_phrase)
+
+      if old_score != new_score
+        ba.update_column(:quality_rating, new_score)
+        updated_count += 1
+      end
+
+      puts "  Processed #{index + 1}/#{unreviewed.count}" if (index + 1) % 1000 == 0
+    end
+
+      puts "Done! Updated #{updated_count} scores"
   end
 
   private
@@ -88,13 +111,12 @@ class BeforeAfterGenerator
   end
 
   def generate_combinations(items_one, items_two, type_one, type_two)
-    
     # Safety check
     if items_one.nil? || items_two.nil?
       puts "Processing: #{type_one} (#{items_one&.count || 'nil'}) + #{type_two} (#{items_two&.count || 'nil'})"
       puts "  WARNING: Skipping due to nil collection"
       return
-    end 
+    end
 
     items_one.each do |item_one|
       items_two.each do |item_two|
@@ -151,12 +173,11 @@ class BeforeAfterGenerator
   end
 
   def determine_format(type_one, type_two)
-
-    if ["Song", "Artist"].include?(type_one) || ["Song", "Artist"].include?(type_two)
+    if [ "Song", "Artist" ].include?(type_one) || [ "Song", "Artist" ].include?(type_two)
       return "concert"
     end
 
-    if ["Movie", "TvShow"].include?(type_one) && ["Movie", "TvShow"].include?(type_two)
+    if [ "Movie", "TvShow" ].include?(type_one) && [ "Movie", "TvShow" ].include?(type_two)
       return "imdb"
     end
       "imdb"
@@ -167,11 +188,20 @@ class BeforeAfterGenerator
     word_count = words.length
     char_count = connecting_word.length
 
+    if words.all? { |w| FILLER_WORDS.include?(w.downcase) }
+      return 1
+    end
+
     if word_count >= WORD_COUNT_THRESH
-      return MULTI_QUALITY_SCORE
+      has_filler = words.any? { |w| FILLER_WORDS.include?(w.downcase) }
+      return has_filler ? MULTI_LOW_QUALITY_SCORE : MULTI_HIGH_QUALITY_SCORE
     end
 
     if word_count == 1
+      if FILLER_WORDS.include?(words.first.downcase)
+        return SINGLE_LOW_QUALITY_SCORE
+      end
+
       if char_count >= CHAR_COUNT_LOWER_THRESH && char_count <= CHAR_COUNT_UPPER_THRESH
         return SINGLE_HIGH_QUALITY_SCORE
       elsif char_count > CHAR_COUNT_UPPER_THRESH
