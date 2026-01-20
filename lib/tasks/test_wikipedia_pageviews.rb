@@ -18,7 +18,16 @@ class WikipediaPageviewTester
       "Keanu_Reeves",
       "Morgan_Freeman",
       "Jennifer_Lawrence",
-      "SOME_RANDOM_NAME_NO_RESULTS"
+      "SOME_RANDOM_NAME_NO_RESULTS",
+      "Cristiano_Ronaldo",
+      "Tyla",
+      "Jeremy_Allen_White",
+      "Lisa_(rapper)",
+      "Macaulay_Culkin",
+      "Pauly_Shore",
+      "Rachael_Leigh_Cook",
+      "Jonathan_Taylor_Thomas",
+      "Freddie_Prinze"
     ]
 
     puts "Testing wikipedia pageviews (12 month average)\n\n"
