@@ -27,17 +27,43 @@
   <div class="item-details">
     <h3>Item One: <%= @before_after.item_one_type %></h3>
     <p><strong>Title:</strong> <%= @before_after.item_one.title %></p>
-    <p><strong>Year:</strong> <%= @before_after.item_one.year %></p>
-    <p><strong>Vote Count:</strong> <%= @before_after.item_one.vote_count %></p>
-    <p><strong>Overview:</strong> <%= @before_after.item_one.overview %></p>
+    
+    <% case @before_after.item_one_type %>
+    <% when 'Movie', 'TvShow' %>
+      <p><strong>Year:</strong> <%= @before_after.item_one.year %></p>
+      <p><strong>Vote Count:</strong> <%= @before_after.item_one.vote_count %></p>
+      <p><strong>Overview:</strong> <%= @before_after.item_one.overview %></p>
+    <% when 'Artist' %>
+      <p><strong>Followers:</strong> <%= number_with_delimiter(@before_after.item_one.followers) %></p>
+      <p><strong>Popularity:</strong> <%= @before_after.item_one.popularity %></p>
+      <p><strong>Genres:</strong> <%= @before_after.item_one.genres&.join(', ') %></p>
+    <% when 'Song' %>
+      <p><strong>Artist:</strong> <%= @before_after.item_one.artist.name %></p>
+      <p><strong>Album:</strong> <%= @before_after.item_one.album_name %></p>
+      <p><strong>Release Date:</strong> <%= @before_after.item_one.release_date %></p>
+      <p><strong>Popularity:</strong> <%= @before_after.item_one.popularity %></p>
+    <% end %>
   </div>
-  
+
   <div class="item-details">
     <h3>Item Two: <%= @before_after.item_two_type %></h3>
     <p><strong>Title:</strong> <%= @before_after.item_two.title %></p>
-    <p><strong>Year:</strong> <%= @before_after.item_two.year %></p>
-    <p><strong>Vote Count:</strong> <%= @before_after.item_two.vote_count %></p>
-    <p><strong>Overview:</strong> <%= @before_after.item_two.overview %></p>
+    
+    <% case @before_after.item_two_type %>
+    <% when 'Movie', 'TvShow' %>
+      <p><strong>Year:</strong> <%= @before_after.item_two.year %></p>
+      <p><strong>Vote Count:</strong> <%= @before_after.item_two.vote_count %></p>
+      <p><strong>Overview:</strong> <%= @before_after.item_two.overview %></p>
+    <% when 'Artist' %>
+      <p><strong>Followers:</strong> <%= number_with_delimiter(@before_after.item_two.followers) %></p>
+      <p><strong>Popularity:</strong> <%= @before_after.item_two.popularity %></p>
+      <p><strong>Genres:</strong> <%= @before_after.item_two.genres&.join(', ') %></p>
+    <% when 'Song' %>
+      <p><strong>Artist:</strong> <%= @before_after.item_two.artist.name %></p>
+      <p><strong>Album:</strong> <%= @before_after.item_two.album_name %></p>
+      <p><strong>Release Date:</strong> <%= @before_after.item_two.release_date %></p>
+      <p><strong>Popularity:</strong> <%= @before_after.item_two.popularity %></p>
+    <% end %>
   </div>
   
   <div class="review-form">
