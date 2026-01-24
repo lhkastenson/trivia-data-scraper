@@ -14,7 +14,7 @@ class CreatePeople < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    add_index :people, [:source_type, :source_id], unique: true
+    add_index :people, [ :source_type, :source_id ], unique: true
     add_index :people, :name
     add_index :people, :popularity_score
   end

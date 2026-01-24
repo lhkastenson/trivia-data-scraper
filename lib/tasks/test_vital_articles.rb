@@ -32,13 +32,13 @@ class VitalArticlesTester
     puts "  Total Level 4 people: #{people_list.count}"
     puts "  People with #{PAGEVIEW_THRESH}+ views: #{qualified_people.count}"
 
-    sample = qualified_people.sample([20, qualified_people.count].min)
+    sample = qualified_people.sample([ 20, qualified_people.count ].min)
 
     puts "\nTop 20 by popularity:"
     sample.sort_by { |p| -p[:views] }.first(20).each do |person|
       puts "  #{person[:name]}: #{format_number(person[:views])}"
     end
-    
+
     # Stats
     views = qualified_people.map { |p| p[:views] }
     if views.any?
@@ -65,9 +65,9 @@ class VitalArticlesTester
     links = response.dig("parse", "links") || []
 
     people = links
-      .select{ |link| link["ns"] == 0 }
-      .map{ |link| link["*"] }
-      .reject{ |name| name.start_with?("Wikipedia:", "User:", "Talk:") }
+      .select { |link| link["ns"] == 0 }
+      .map { |link| link["*"] }
+      .reject { |name| name.start_with?("Wikipedia:", "User:", "Talk:") }
 
     people
   end
@@ -75,24 +75,24 @@ class VitalArticlesTester
   def get_annual_average_pageviews(article_name)
     end_date = Date.today.beginning_of_month
     start_date = end_date << 12
-    
+
     # Properly encode URL
-    encoded_name = URI.encode_www_form_component(article_name.gsub(' ', '_'))
-    
+    encoded_name = URI.encode_www_form_component(article_name.gsub(" ", "_"))
+
     url = "#{PAGEVIEWS_URL}/en.wikipedia/all-access/user/#{encoded_name}/monthly/#{start_date.strftime('%Y%m%d')}00/#{end_date.strftime('%Y%m%d')}00"
-    
+
     headers = {}
     if ENV["WIKIPEDIA_ACCESS_TOKEN"]
       headers["Authorization"] = "Bearer #{ENV["WIKIPEDIA_ACCESS_TOKEN"]}"
     end
 
     response = HTTParty.get(url, headers: headers)
-    
+
     if response.code == 200
-      items = response.dig('items') || []
+      items = response.dig("items") || []
       return nil if items.empty?
-      
-      total_views = items.sum { |item| item['views'] }
+
+      total_views = items.sum { |item| item["views"] }
       (total_views / items.length.to_f).round
     else
       puts "  API returned #{response.code} for #{article_name}"

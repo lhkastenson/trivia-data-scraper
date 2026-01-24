@@ -2,7 +2,6 @@ require "httparty"
 require "date"
 
 class WikipediaPageviewTester
-
   BASE_URL = "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article"
 
   YEAR_MONTHS = 12
