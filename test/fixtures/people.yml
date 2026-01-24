@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  birth_year: 1
+  death_year: 1
+  bio_snippet: MyText
+  nationality: MyString
+  source_type: MyString
+  source_id: MyString
+  popularity_score: 1
+  metadata: 
+
+two:
+  name: MyString
+  birth_year: 1
+  death_year: 1
+  bio_snippet: MyText
+  nationality: MyString
+  source_type: MyString
+  source_id: MyString
+  popularity_score: 1
+  metadata: 

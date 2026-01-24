@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_18_173603) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_20_212607) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -62,6 +62,23 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_18_173603) do
     t.index ["tmdb_id"], name: "index_movies_on_tmdb_id", unique: true
     t.index ["vote_count"], name: "index_movies_on_vote_count"
     t.index ["year"], name: "index_movies_on_year"
+  end
+
+  create_table "people", force: :cascade do |t|
+    t.text "bio_snippet"
+    t.integer "birth_year"
+    t.datetime "created_at", null: false
+    t.integer "death_year"
+    t.jsonb "metadata"
+    t.string "name"
+    t.string "nationality"
+    t.integer "popularity_score"
+    t.string "source_id"
+    t.string "source_type"
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_people_on_name"
+    t.index ["popularity_score"], name: "index_people_on_popularity_score"
+    t.index ["source_type", "source_id"], name: "index_people_on_source_type_and_source_id", unique: true
   end
 
   create_table "songs", force: :cascade do |t|
