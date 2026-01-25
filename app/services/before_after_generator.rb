@@ -15,6 +15,7 @@ class BeforeAfterGenerator
     @tv_shows = TvShow.all.to_a
     @artists = Artist.all.to_a
     @songs = Song.all.to_a
+    @persons = Person.all.to_a
   end
 
   def generate_all
@@ -25,23 +26,33 @@ class BeforeAfterGenerator
     generate_combinations(@tv_shows, @tv_shows, "TvShow", "TvShow")
     generate_combinations(@artists, @artists, "Artist", "Artist")
     generate_combinations(@songs, @songs, "Song", "Song")
+    generate_combinations(@persons, @persons, "Person", "Person")
 
     # cross category
     generate_combinations(@movies, @tv_shows, "Movie", "TvShow")
     generate_combinations(@movies, @artists, "Movie", "Artist")
     generate_combinations(@movies, @songs, "Movie", "Song")
+    generate_combinations(@movies, @persons, "Movie", "Person")
 
     generate_combinations(@tv_shows, @movies, "TvShow", "Movie")
     generate_combinations(@tv_shows, @artists, "TvShow", "Artist")
     generate_combinations(@tv_shows, @songs, "TvShow", "Song")
+    generate_combinations(@tv_shows, @persons, "TvShow", "Person")
 
     generate_combinations(@artists, @movies, "Artist", "Movie")
     generate_combinations(@artists, @tv_shows, "Artist", "TvShow")
     generate_combinations(@artists, @songs, "Artist", "Song")
+    generate_combinations(@artists, @persons, "Artist", "Person")
 
     generate_combinations(@songs, @movies, "Song", "Movie")
     generate_combinations(@songs, @tv_shows, "Song", "TvShow")
     generate_combinations(@songs, @artists, "Song", "Artist")
+    generate_combinations(@songs, @persons, "Song", "Person")
+
+    generate_combinations(@persons, @movies, "Person", "Movie")
+    generate_combinations(@persons, @tv_shows, "Person", "TvShow")
+    generate_combinations(@persons, @artists, "Person", "Artist")
+    generate_combinations(@persons, @songs, "Person", "Song")
 
     puts "Done!"
   end
@@ -173,6 +184,10 @@ class BeforeAfterGenerator
   end
 
   def determine_format(type_one, type_two)
+    if ["Person"].include?(type_one) || ["Person"].include?(type_two)
+      return "tinder"
+    end
+
     if [ "Song", "Artist" ].include?(type_one) || [ "Song", "Artist" ].include?(type_two)
       return "concert"
     end
