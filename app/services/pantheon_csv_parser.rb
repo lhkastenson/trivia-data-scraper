@@ -38,8 +38,8 @@ class PantheonCsvParser
       source_id: row["wd_id"]
     ) do |person|
       person.name = row["name"]
-      person.birth_year = row["birthyear"].to_i unless row["birthyear"].empty?
-      person.death_year = row["deathyear"].to_i unless row["deathyear"].empty?
+      person.birth_year = row["birthyear"].to_i unless row["birthyear"].to_s.empty?
+      person.death_year = row["deathyear"].to_i unless row["deathyear"].to_s.empty?
       person.nationality = row["byplace_country"]
       person.popularity_score = row["hpi"].to_f.round
       person.metadata = {
