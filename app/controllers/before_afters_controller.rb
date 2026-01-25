@@ -10,6 +10,10 @@ class BeforeAftersController < ApplicationController
       @before_afters = @before_afters.where("quality_rating >= ?", params[:min_rating])
     end
 
+    if params[:format].present?
+      @before_afters = @before_afters.where(format: params[:format])
+    end
+
     sort_by = params[:sort_by] || "quality_rating"
     sort_dir = params[:sort_dir] || "desc"
     @before_afters = @before_afters.order("#{sort_by} #{sort_dir}")
