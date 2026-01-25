@@ -31,6 +31,9 @@
       <%= f.label :min_rating, "Min Quality" %>
       <%= f.select :min_rating, options_for_select([['All', ''], ['7+', 7], ['5+', 5], ['3+', 3]], params[:min_rating]), {}, { onchange: 'this.form.submit()' } %>
       
+      <%= f.label :format %>
+      <%= f.select :format, options_for_select([['All', ''], ['IMDb', 'imdb'], ['Concert', 'concert'], ['Tinder', 'tinder'], ['Yelp', 'yelp']], params[:format]), {}, { onchange: 'this.form.submit()' } %>
+    
       <%= f.label :sort_by %>
       <%= f.select :sort_by, options_for_select([['Quality Rating', 'quality_rating'], ['Created Date', 'created_at']], params[:sort_by]), {}, { onchange: 'this.form.submit()' } %>
       

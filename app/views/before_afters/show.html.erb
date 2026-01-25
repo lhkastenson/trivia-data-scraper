@@ -42,6 +42,15 @@
       <p><strong>Album:</strong> <%= @before_after.item_one.album_name %></p>
       <p><strong>Release Date:</strong> <%= @before_after.item_one.release_date %></p>
       <p><strong>Popularity:</strong> <%= @before_after.item_one.popularity %></p>
+    <% when 'Person' %>
+      <p><strong>Birth Year:</strong> <%= @before_after.item_one.birth_year %></p>
+      <% if @before_after.item_one.death_year %>
+        <p><strong>Death Year:</strong> <%= @before_after.item_one.death_year %></p>
+      <% end %>
+      <p><strong>Nationality:</strong> <%= @before_after.item_one.nationality %></p>
+      <p><strong>Occupation:</strong> <%= @before_after.item_one.metadata&.dig('occupation') %></p>
+      <p><strong>HPI Score:</strong> <%= @before_after.item_one.popularity_score %></p>
+      <p><strong>Languages:</strong> <%= @before_after.item_one.metadata&.dig('languages') %> Wikipedia editions</p>
     <% end %>
   </div>
 
@@ -63,6 +72,15 @@
       <p><strong>Album:</strong> <%= @before_after.item_two.album_name %></p>
       <p><strong>Release Date:</strong> <%= @before_after.item_two.release_date %></p>
       <p><strong>Popularity:</strong> <%= @before_after.item_two.popularity %></p>
+    <% when 'Person' %>
+      <p><strong>Birth Year:</strong> <%= @before_after.item_two.birth_year %></p>
+      <% if @before_after.item_two.death_year %>
+        <p><strong>Death Year:</strong> <%= @before_after.item_two.death_year %></p>
+      <% end %>
+      <p><strong>Nationality:</strong> <%= @before_after.item_two.nationality %></p>
+      <p><strong>Occupation:</strong> <%= @before_after.item_two.metadata&.dig('occupation') %></p>
+      <p><strong>HPI Score:</strong> <%= @before_after.item_two.popularity_score %></p>
+      <p><strong>Languages:</strong> <%= @before_after.item_two.metadata&.dig('languages') %> Wikipedia editions</p>
     <% end %>
   </div>
   
