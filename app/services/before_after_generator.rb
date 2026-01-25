@@ -184,7 +184,7 @@ class BeforeAfterGenerator
   end
 
   def determine_format(type_one, type_two)
-    if ["Person"].include?(type_one) || ["Person"].include?(type_two)
+    if [ "Person" ].include?(type_one) || [ "Person" ].include?(type_two)
       return "tinder"
     end
 
