@@ -65,6 +65,6 @@ class BeforeAftersController < ApplicationController
 
   private
   def before_after_params
-    params.require(:before_after).permit(:status, :quality_rating)
+    params.require(:before_after).permit(:status, :quality_rating, :presentation_data_json)
   end
 end

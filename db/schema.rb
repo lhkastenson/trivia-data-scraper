@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_20_212607) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_26_072426) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -35,6 +35,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_20_212607) do
     t.string "item_one_type", null: false
     t.bigint "item_two_id", null: false
     t.string "item_two_type", null: false
+    t.jsonb "presentation_data", default: {}
     t.integer "quality_rating"
     t.string "status", default: "generated", null: false
     t.datetime "updated_at", null: false
@@ -42,6 +43,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_20_212607) do
     t.index ["item_one_type", "item_one_id"], name: "index_before_afters_on_item_one_type_and_item_one_id"
     t.index ["item_two_type", "item_two_id"], name: "index_before_afters_on_item_two"
     t.index ["item_two_type", "item_two_id"], name: "index_before_afters_on_item_two_type_and_item_two_id"
+    t.index ["presentation_data"], name: "index_before_afters_on_presentation_data", using: :gin
     t.index ["quality_rating"], name: "index_before_afters_on_quality_rating"
     t.index ["status"], name: "index_before_afters_on_status"
   end
