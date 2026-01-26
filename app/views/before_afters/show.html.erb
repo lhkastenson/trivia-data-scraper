@@ -105,6 +105,16 @@
         <%= f.radio_button :status, 'generated' %>
         <%= f.label :status_generated, 'Undecided' %>
       </div>
+
+      <div style="margin-top: 20px;">
+        <%= f.label :presentation_data_json, "Presentation Data (JSON)" %>
+        <%= f.text_area :presentation_data_json, 
+                        value: @before_after.presentation_data.to_json,
+                        rows: 10,
+                        style: "width: 100%; font-family: monospace; font-size: 12px;",
+                        placeholder: '{"plot_summary": "...", "actors": ["Actor 1", "Actor 2"], "genre": "...", "rating": 7.5}' %>
+        <small style="color: #666;">Enter valid JSON. Leave empty to clear.</small>
+      </div>
       
       <div style="margin-top: 20px;">
         <%= f.submit 'Save & Next', class: 'button approve' %>
