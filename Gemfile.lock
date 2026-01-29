@@ -115,6 +115,8 @@ GEM
     faraday-net_http (3.4.2)
       net-http (~> 0.5)
     ffi (1.17.3-x86_64-linux-gnu)
+    foreman (0.90.0)
+      thor (~> 1.4)
     fugit (1.12.1)
       et-orbi (~> 1.4)
       raabro (~> 1.4)
@@ -390,6 +392,7 @@ DEPENDENCIES
   bundler-audit
   debug
   dotenv-rails
+  foreman
   httparty
   image_processing (~> 1.2)
   kamal
