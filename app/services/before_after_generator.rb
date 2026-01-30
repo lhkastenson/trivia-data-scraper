@@ -16,6 +16,7 @@ class BeforeAfterGenerator
     @artists = Artist.all.to_a
     @songs = Song.all.to_a
     @persons = Person.all.to_a
+    @idioms = Idiom.all.to_a
   end
 
   def generate_all
@@ -33,26 +34,37 @@ class BeforeAfterGenerator
     generate_combinations(@movies, @artists, "Movie", "Artist")
     generate_combinations(@movies, @songs, "Movie", "Song")
     generate_combinations(@movies, @persons, "Movie", "Person")
+    generate_combinations(@movies, @idioms, "Movie", "Idiom")
 
     generate_combinations(@tv_shows, @movies, "TvShow", "Movie")
     generate_combinations(@tv_shows, @artists, "TvShow", "Artist")
     generate_combinations(@tv_shows, @songs, "TvShow", "Song")
     generate_combinations(@tv_shows, @persons, "TvShow", "Person")
+    generate_combinations(@tv_shows, @idioms, "TvShow", "Idiom")
 
     generate_combinations(@artists, @movies, "Artist", "Movie")
     generate_combinations(@artists, @tv_shows, "Artist", "TvShow")
     generate_combinations(@artists, @songs, "Artist", "Song")
     generate_combinations(@artists, @persons, "Artist", "Person")
+    generate_combinations(@artists, @idioms, "Artist", "Idiom")
 
     generate_combinations(@songs, @movies, "Song", "Movie")
     generate_combinations(@songs, @tv_shows, "Song", "TvShow")
     generate_combinations(@songs, @artists, "Song", "Artist")
     generate_combinations(@songs, @persons, "Song", "Person")
+    generate_combinations(@songs, @idioms, "Song", "Idiom")
 
     generate_combinations(@persons, @movies, "Person", "Movie")
     generate_combinations(@persons, @tv_shows, "Person", "TvShow")
     generate_combinations(@persons, @artists, "Person", "Artist")
     generate_combinations(@persons, @songs, "Person", "Song")
+    generate_combinations(@persons, @idioms, "Person", "Idiom")
+
+    generate_combinations(@idioms, @movies, "Idiom", "Movie")
+    generate_combinations(@idioms, @tv_shows, "Idiom", "TvShow")
+    generate_combinations(@idioms, @artists, "Idiom", "Artist")
+    generate_combinations(@idioms, @songs, "Idiom", "Song")
+    generate_combinations(@idioms, @persons, "Idiom", "Person")
 
     puts "Done!"
   end
@@ -129,6 +141,12 @@ class BeforeAfterGenerator
       return
     end
 
+    existing = Set.new(
+      BeforeAfter.where(item_one_type: type_one, item_two_type: type_two)
+        .pluck(:item_one_id, :item_two_id, :connecting_word)
+        .map { |a, b, c| "#{a}-#{b}-#{c}" }
+    )
+
     items_one.each do |item_one|
       items_two.each do |item_two|
         next if item_one.id == item_two.id && type_one == type_two
@@ -142,6 +160,9 @@ class BeforeAfterGenerator
 
         overlap = find_overlap(item_one.title, item_two.title)
         next unless overlap
+
+        key = "#{item_one.id}-#{item_two.id}-#{overlap}"
+        next if existing.include?(key)
 
         create_before_after(item_one, item_two, overlap, type_one, type_two)
       end
