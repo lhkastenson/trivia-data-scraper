@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_27_190345) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_30_043037) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -46,6 +46,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_27_190345) do
     t.index ["presentation_data"], name: "index_before_afters_on_presentation_data", using: :gin
     t.index ["quality_rating"], name: "index_before_afters_on_quality_rating"
     t.index ["status"], name: "index_before_afters_on_status"
+  end
+
+  create_table "idioms", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.text "definition"
+    t.string "phrase"
+    t.datetime "updated_at", null: false
+    t.index ["phrase"], name: "index_idioms_on_phrase", unique: true
   end
 
   create_table "movies", force: :cascade do |t|
